@@ -7,6 +7,7 @@ def send_email(subject, body, to_email):
     """Send email"""
     from_email = os.getenv("EMAIL_USER")
     from_password = os.getenv("EMAIL_PASSWORD")
+    print(from_email, from_password)
 
     msg = MIMEText(body)
     msg["Subject"] = subject
