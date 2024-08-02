@@ -1,8 +1,11 @@
-name: Daily Book Notification
+name: Daily Crawler
 
 on:
     schedule:
         - cron: "9 0 * * *"
+    push:
+        branches:
+            - main
     workflow_dispatch:
 
 jobs:
@@ -16,7 +19,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v2
               with:
-                  python-version: "3.11.9"
+                  python-version: "3.11"
 
             - name: Install dependencies
               run: |
@@ -30,4 +33,13 @@ jobs:
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
               run: |
-                  python main.py
+                  python crawler.py
+
+            - name: Send test email
+              if: github.event_name == 'push'
+              env:
+                  EMAIL_USER: ${{ secrets.EMAIL_USER }}
+                  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+                  TO_EMAIL: ${{ secrets.TO_EMAIL }}
+              run: |
+                  python test_email.py
