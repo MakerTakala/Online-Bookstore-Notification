@@ -5,7 +5,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 from base_type import Book
-from crawler import KingstoneCrawler
+from king_stone_crawler import KingstoneCrawler
 from sender import BookSender
 
 
