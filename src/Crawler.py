@@ -1,4 +1,3 @@
-# from typing import
 from urllib.parse import quote
 
 from selenium import webdriver
@@ -12,7 +11,7 @@ class KingstoneCrawler:
 
     def __init__(self) -> None:
         self.driver = webdriver.Chrome()
-        self.base_url = "https://www.kingstone.com.tw/"
+        self.base_url = "https://www.kingstone.com.tw"
 
     def _url_encode(self, search_query: str) -> str:
         """Encode search query to url"""
@@ -38,7 +37,7 @@ class KingstoneCrawler:
         publish_date = book_html.find("span", class_="pubdate").find("b")
 
         title = title.text.strip()
-        image = (image["src"],)
+        image = image["src"]
         tatebetsu = tatebetsu.text.strip()
         selling_type = selling_type.text.strip()
         link = self.base_url + link["href"]
@@ -48,6 +47,8 @@ class KingstoneCrawler:
         ) + f" {price.text.strip()}元"
         publisher = publisher.text.strip()
         publish_date = publish_date.text.strip().replace("/", "-")
+
+        print(image)
 
         return Book(
             title=title,
@@ -64,9 +65,8 @@ class KingstoneCrawler:
     def get_books(self, search_query: str) -> list[Book]:
         """Get books from Kingstone"""
         search_url = self._url_encode(search_query)
-        pages = (
-            self._get_html(search_url).find("div", class_="searchResultTitle").text[-1]
-        )
+        page_html = self._get_html(search_url)
+        pages = page_html.find("div", class_="searchResultTitle").text.strip()[-1]
 
         books_list: list[Book] = []
         for i in range(int(pages)):
@@ -75,5 +75,4 @@ class KingstoneCrawler:
             books_html = page_html.find_all("li", class_="displayunit")
             for book_html in books_html:
                 books_list.append(self._extract_book_info(book_html))
-        self.driver.quit()
         return books_list

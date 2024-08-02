@@ -2,6 +2,8 @@ import os
 import argparse
 from datetime import datetime
 
+from dotenv import load_dotenv
+
 from base_type import Book
 from crawler import KingstoneCrawler
 from sender import BookSender
@@ -27,6 +29,7 @@ def filter_today_books(all_books: list[Book]) -> list[Book]:
 
 
 if __name__ == "__main__":
+    load_dotenv()
     queries = os.getenv("QUERIES").split(",")
     registers = os.getenv("REGISTER").split(",")
     email_sender = os.getenv("EMAIL_SENDER")

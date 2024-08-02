@@ -36,6 +36,7 @@ class BookSender:
             </body>
         </html>
         """
+        body = MIMEText(body, "html")
         return subject, body
 
     def send_email(self, rigisters: list[str], books: list[Book]):
@@ -45,7 +46,7 @@ class BookSender:
             return
 
         subject, body = self.create_email_body(books)
-        msg = MIMEText(body)
+        msg = body
         msg["Subject"] = subject
         msg["From"] = self.email_sender
 
