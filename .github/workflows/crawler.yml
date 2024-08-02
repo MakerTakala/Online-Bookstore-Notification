@@ -11,6 +11,7 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        environment: Book Notification
 
         steps:
             - name: Checkout code
@@ -29,7 +30,7 @@ jobs:
             - name: Run crawler
               if: github.event_name == 'schedule'
               env:
-                  QUERIES: ${{ secrets.QUERIES }}
+                  QUERIES: ${{ env.QUERIES }}
                   EMAIL_USER: ${{ secrets.EMAIL_USER }}
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
