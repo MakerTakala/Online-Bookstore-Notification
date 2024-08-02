@@ -2,7 +2,7 @@ name: Daily Crawler
 
 on:
     schedule:
-        - cron: "9 0 * * *"
+        - cron: "0 0 * * *"
     push:
         branches:
             - main
@@ -43,5 +43,4 @@ jobs:
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
               run: |
-                  echo $EMAIL_USER $TO_EMAIL
                   python src/test_email.py
