@@ -27,13 +27,14 @@ jobs:
                   pip install selenium beautifulsoup4
 
             - name: Run crawler
+              if: github.event_name == 'schedule'
               env:
                   QUERIES: ${{ secrets.QUERIES }}
                   EMAIL_USER: ${{ secrets.EMAIL_USER }}
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
               run: |
-                  python crawler.py
+                  python main.py
 
             - name: Send test email
               if: github.event_name == 'push'
