@@ -34,7 +34,7 @@ jobs:
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
               run: |
-                  python main.py
+                  python src/main.py
 
             - name: Send test email
               if: github.event_name == 'push'
@@ -43,4 +43,4 @@ jobs:
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
               run: |
-                  python test_email.py
+                  python src/test_email.py
