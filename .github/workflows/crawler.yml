@@ -43,4 +43,5 @@ jobs:
                   EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
                   TO_EMAIL: ${{ secrets.TO_EMAIL }}
               run: |
+                  echo $EMAIL_USER $TO_EMAIL
                   python src/test_email.py
