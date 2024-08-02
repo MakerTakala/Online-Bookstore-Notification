@@ -31,17 +31,17 @@ jobs:
               if: github.event_name == 'schedule'
               env:
                   QUERIES: ${{ env.QUERIES }}
-                  EMAIL_USER: ${{ secrets.EMAIL_USER }}
-                  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-                  TO_EMAIL: ${{ secrets.TO_EMAIL }}
+                  EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+                  EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
+                  REGISTER: ${{ env.REGISTER }}
               run: |
                   python src/main.py
 
             - name: Send test email
               if: github.event_name == 'push'
               env:
-                  EMAIL_USER: ${{ secrets.EMAIL_USER }}
-                  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-                  TO_EMAIL: ${{ secrets.TO_EMAIL }}
+                  EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+                  EMAIL_SENDER_PASSWORD: ${{ secrets.EMAIL_SENDER_PASSWORD }}
+                  REGISTER: ${{ env.REGISTER }}
               run: |
-                  python src/test_email.py
+                  python src/main.py --test
