@@ -20,6 +20,4 @@ def send_email(subject, body, to_email):
 
 
 if __name__ == "__main__":
-    send_email(
-        "Book Notification Test", "This is a test email", os.getenv("EMAIL_USER")
-    )
+    send_email("Book Notification Test", "This is test email", os.getenv("EMAIL_USER"))
