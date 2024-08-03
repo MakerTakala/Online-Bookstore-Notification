@@ -56,8 +56,6 @@ class KingstoneCrawler:
         publisher = publisher.text.strip()
         publish_date = publish_date.text.strip().replace("/", "-")
 
-        print(image)
-
         return Book(
             title=title,
             image=image,
