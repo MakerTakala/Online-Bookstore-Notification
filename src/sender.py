@@ -19,13 +19,14 @@ class BookSender:
             book_show_html += f"""
             <div>
                 <h3>{book.title}</h3>
-                <img src="{book.image}" alt="{book.title}" />
+                <a href="{book.link}"><img src="{book.image}" alt="{book.title}" /></a>
                 <p>作者: {book.author}</p>
                 <p>價格: {book.price}</p>
                 <p>出版社: {book.publisher}</p>
                 <p>出版日期: {book.publish_date}</p>
-                <a href="{book.link}">連結</a>
+                <button><a href="{book.link}">前往購買</a></button>
             </div>
+            <br />
             """
 
         body = f"""

@@ -1,6 +1,8 @@
 from urllib.parse import quote
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 from bs4 import BeautifulSoup
 
@@ -11,7 +13,12 @@ class KingstoneCrawler:
     """Crawler for Kingstone"""
 
     def __init__(self) -> None:
-        self.driver = webdriver.Chrome()
+        options = Options()
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+
+        self.driver = webdriver.Chrome(service=Service(), options=options)
         self.base_url = "https://www.kingstone.com.tw"
 
     def _url_encode(self, search_query: str) -> str:
