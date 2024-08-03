@@ -27,6 +27,16 @@ jobs:
                   python -m pip install --upgrade pip
                   pip install selenium beautifulsoup4 python-dotenv
 
+            - name: Set up Chrome Driver
+              uses: actions/setup-chromedriver@v2
+              with:
+                  version: "latest"
+
+            - name: Set up Chrome
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y google-chrome-stable
+
             - name: Run crawler
               if: github.event_name == 'schedule'
               env:
