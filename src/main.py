@@ -41,8 +41,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     books = crawl_books(queries)
-    if args.test:
-        book_sender.send_email(registers, books)
-    else:
-        today_books = filter_today_books(books)
-        book_sender.send_email(registers, today_books)
+    book_sender.send_email(registers, books if args.test else filter_today_books(books))
