@@ -23,7 +23,9 @@ def filter_today_books(all_books: list[Book]) -> list[Book]:
     """Filter books"""
     allowed_books: list[Book] = []
     for book in all_books:
-        if datetime.today() == book.publish_date:
+        if book.publish_date == "":
+            continue
+        if (datetime.now() - datetime.strptime(book.publish_date, "%Y-%m-%d")).days < 7:
             allowed_books.append(book)
     return allowed_books
 

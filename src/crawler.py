@@ -3,6 +3,9 @@ from urllib.parse import quote
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from bs4 import BeautifulSoup
 
@@ -34,27 +37,41 @@ class KingstoneCrawler:
     def _extract_book_info(self, book_html: BeautifulSoup) -> Book:
         """Get book info from html"""
         title = book_html.find("h3", class_="pdnamebox")
-        image = book_html.find("div", class_="coverbox").find("img")
+        image = book_html.find("div", class_="coverbox")
+        image = image.find("img") if image else None
         tatebetsu = book_html.find("span", class_="book")
-        selling_type = book_html.find("div", class_="classbox").find("a")
-        link = book_html.find("div", class_="coverbox").find("a")
-        author = book_html.find("span", class_="author").find("a")
+        selling_type = book_html.find("div", class_="classbox")
+        selling_type = selling_type.find("a") if selling_type else None
+        link = book_html.find("div", class_="coverbox")
+        link = link.find("a") if link else None
+        author = book_html.find("span", class_="author")
+        author = author.find("a") if author else None
         discount = book_html.find("b", class_="b1")
-        price = book_html.find("div", class_="buymixbox").find("b", class_="")
-        publisher = book_html.find("span", class_="publish").find("a")
-        publish_date = book_html.find("span", class_="pubdate").find("b")
+        price = book_html.find("div", class_="buymixbox")
+        price = price.find("b", class_="") if price else None
+        publisher = book_html.find("span", class_="publish")
+        publisher = publisher.find("a") if publisher else None
+        publish_date = book_html.find("span", class_="pubdate")
+        publish_date = publish_date.find("b") if publish_date else None
 
-        title = title.text.strip()
-        image = image["src"]
-        tatebetsu = tatebetsu.text.strip()
-        selling_type = selling_type.text.strip()
-        link = self.base_url + link["href"]
-        author = author.text.strip()
+        title = title.text.strip() if title else ""
+        image = image["src"] if image else ""
+        tatebetsu = tatebetsu.text.strip() if tatebetsu else ""
+        selling_type = selling_type.text.strip() if selling_type else ""
+        link = self.base_url + link["href"] if link else ""
+        author = author.text.strip() if author else ""
         price = (
-            "" if discount is None else discount.text.strip() + "折 "
-        ) + f" {price.text.strip()}元"
-        publisher = publisher.text.strip()
-        publish_date = publish_date.text.strip().replace("/", "-")
+            (
+                ("" if discount is None else discount.text.strip() + "折 ")
+                + f" {price.text.strip()}元"
+            )
+            if price
+            else ""
+        )
+        publisher = publisher.text.strip() if publisher else ""
+        publish_date = (
+            publish_date.text.strip().replace("/", "-") if publish_date else ""
+        )
 
         return Book(
             title=title,
@@ -72,11 +89,16 @@ class KingstoneCrawler:
         """Get books from Kingstone"""
         search_url = self._url_encode(search_query)
         page_html = self._get_html(search_url)
-        pages = page_html.find("div", class_="searchResultTitle").text.strip()[-1]
+
+        # pages = page_html.find("div", class_="searchResultTitle").text.strip()[-1]
+        wait = WebDriverWait(self.driver, 10)
+        pages = wait.until(
+            EC.presence_of_element_located((By.CLASS_NAME, "searchResultTitle"))
+        ).text.strip()[-1]
 
         books_list: list[Book] = []
         for i in range(int(pages)):
-            self.driver.get(f"{search_url}/page/{i}")
+            self.driver.get(f"{search_url}/page/{i + 1}")
             page_html = BeautifulSoup(self.driver.page_source, "html.parser")
             books_html = page_html.find_all("li", class_="displayunit")
             for book_html in books_html:
